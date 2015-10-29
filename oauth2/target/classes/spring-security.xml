@@ -64,11 +64,17 @@
 	
 	<!-- 定义一种客户端用户 -->
 	<!-- 客户端信息服务配置，即客户id，客户端使用的权限类型,客户端的私密信息，客户端的作用域 -->
-    <oauth2:client-details-service id="clientDetailsService">
+<!-- 此处需要区分不同的客户端系统，需要代码实现 -->
+    <!-- <oauth2:client-details-service id="clientDetailsService">
 		<oauth2:client client-id="mobile_1"
 			authorized-grant-types="password,authorization_code,refresh_token,implicit"
 			secret="secret_1" scope="read,write,trust" />
-	</oauth2:client-details-service>
+	</oauth2:client-details-service> -->
+	<!-- 实现数据库存储客户系统详细功能 -->
+    <beans:bean id="clientDetailsService" class="com.hy.oauth2.service.ClientDetailsServiceImpl">
+        <beans:constructor-arg ref="dataSource" index="0"/>
+    </beans:bean>
+    
 	<!-- 客户端服务类 -->
 	<beans:bean id="oauth2ClientDetailsUserService"
 		class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
@@ -93,7 +99,8 @@
 	<!-- 授权拒绝处理 -->
 	<beans:bean id="oauth2AccessDeniedHandler"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
-	<!-- 用户审批处理，服务端对用户的审批 -->
+	<!-- 客户端审批处理，服务端对客户端的审批验证是否可信任 -->
+	<!-- 此处需要重写对客户端系统的审核 -->
 	<beans:bean id="oauthUserApprovalHandler"
 		class="org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler" />
 	<!-- 访问决策管理，认证通过后访问其它资源的决策 -->

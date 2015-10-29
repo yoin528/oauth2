@@ -1,4 +1,4 @@
-package com.ldz.oauth2.controller;
+package com.hy.oauth2.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ldz.oauth2.model.User;
-import com.ldz.oauth2.service.UserService;
+import com.hy.oauth2.model.User;
+import com.hy.oauth2.service.UserService;
 
 @Controller
 @RequestMapping("/")

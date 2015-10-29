@@ -1,4 +1,4 @@
-package com.ldz.oauth2.controller;
+package com.hy.oauth2.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

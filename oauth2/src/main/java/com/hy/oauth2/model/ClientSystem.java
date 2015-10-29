@@ -1,4 +1,4 @@
-package com.ldz.oauth2.model;
+package com.hy.oauth2.model;
 
 import java.io.Serializable;
 import java.util.Date;

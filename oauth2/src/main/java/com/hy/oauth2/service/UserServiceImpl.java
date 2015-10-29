@@ -1,4 +1,4 @@
-package com.ldz.oauth2.service;
+package com.hy.oauth2.service;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ldz.oauth2.model.User;
+import com.hy.oauth2.model.User;
 
 @Service
 @Transactional
