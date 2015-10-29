@@ -13,7 +13,7 @@ public class ClientDetailsServiceImpl extends JdbcClientDetailsService {
 			+ "resource_ids, scope,authorized_grant_types, "
 			+ "web_server_redirect_uri, "
 			+ "authorities, access_token_validity,refresh_token_validity, "
-			+ "additional_information, autoapprove "
+			+ "additional_information,autoapprove "//spring security3.2多了一个字段
 			+ "from oauth_client_details where client_id = ? and archived = 0 ";
 	public ClientDetailsServiceImpl(DataSource dataSource) {
 		super(dataSource);

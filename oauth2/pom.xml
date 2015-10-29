@@ -94,6 +94,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>demo4ssh-security-oauth2</finalName>
+		<finalName>oauth2</finalName>
 	</build>
 </project>

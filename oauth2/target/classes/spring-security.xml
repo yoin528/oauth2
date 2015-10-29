@@ -137,5 +137,5 @@
 	
 	
 	
-	<!-- http://localhost:8080/demo4ssh-security-oauth2/oauth/token?client_id=mobile_1&client_secret=secret_1&grant_type=password&username=zhangsan&password=123456 -->
+	<!-- http://localhost:8080/oauth2/oauth/token?client_id=mobile_1&client_secret=secret_1&grant_type=password&username=zhangsan&password=123456 -->
 </beans:beans>
