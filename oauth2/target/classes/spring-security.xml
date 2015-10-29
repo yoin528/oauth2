@@ -86,7 +86,10 @@
 	</authentication-manager>
 	
     <!-- token储存方式，当用户再次认证时需要由此token进行认证相当于session，两种方式，一个内存，一种数据库-->
-    <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />
+    <!-- <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" /> -->
+    <beans:bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore" >
+        <beans:constructor-arg ref="dataSource" index="0"/>
+    </beans:bean>
     <!-- token服务 -->
 	<beans:bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
 		<beans:property name="tokenStore" ref="tokenStore" />
