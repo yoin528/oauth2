@@ -94,6 +94,7 @@
 	<beans:bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
 		<beans:property name="tokenStore" ref="tokenStore" />
 		<beans:property name="supportRefreshToken" value="true" />
+		<beans:property name="clientDetailsService" ref="clientDetailsService"/>
 	</beans:bean>
 	
 	<!-- 访问认证处理 -->
@@ -102,8 +103,7 @@
 	<!-- 授权拒绝处理 -->
 	<beans:bean id="oauth2AccessDeniedHandler"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
-	<!-- 客户端审批处理，服务端对客户端的审批验证是否可信任 -->
-	<!-- 此处需要重写对客户端系统的审核 -->
+	<!-- 客户端审批处理，服务端对客户端的审批验证是否可信任,实现client是否可信任的关键点 -->
 	<beans:bean id="oauthUserApprovalHandler"
 		class="org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler" />
 	<!-- 访问决策管理，认证通过后访问其它资源的决策 -->
@@ -111,25 +111,33 @@
 		class="org.springframework.security.access.vote.UnanimousBased">
 		<beans:constructor-arg>
 			<beans:list>
-				<beans:bean
-					class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+				<beans:bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
 				<beans:bean class="org.springframework.security.access.vote.RoleVoter" />
-				<beans:bean
-					class="org.springframework.security.access.vote.AuthenticatedVoter" />
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
 	
-	<!-- 配置当前oauth2的server所能支持的请求类型 -->
+	<!-- 数据库生成authorization code -->
+	<beans:bean id="jdbcAuthorizationCodeServices"
+                class="org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices">
+        <beans:constructor-arg index="0" ref="dataSource"/>
+    </beans:bean>
+	
+	<!-- 配置当前oauth2的server所能支持的请求类型，使用数据库生成authorization code -->
 	<oauth2:authorization-server
-		client-details-service-ref="clientDetailsService" token-services-ref="tokenServices"
-		user-approval-handler-ref="oauthUserApprovalHandler">
-		<oauth2:authorization-code />
+		client-details-service-ref="clientDetailsService" 
+		token-services-ref="tokenServices"
+		user-approval-handler-ref="oauthUserApprovalHandler" 
+		user-approval-page="oauth_approval" 
+		error-page="oauth_error">
+		<oauth2:authorization-code authorization-code-services-ref="jdbcAuthorizationCodeServices"/>
 		<oauth2:implicit />
 		<oauth2:refresh-token />
 		<oauth2:client-credentials />
 		<oauth2:password />
 	</oauth2:authorization-server>
+	
 	
 	<!-- 定义受保存的资源 -->
 	<oauth2:resource-server id="mobileResourceServer" resource-id="mobile-resource" token-services-ref="tokenServices" />

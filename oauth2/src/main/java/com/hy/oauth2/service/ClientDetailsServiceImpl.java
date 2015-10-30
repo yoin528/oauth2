@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 
 /**
- * 覆盖查询数据库中要询客户端系统的查询方法，方法以前其它客户端接入
+ * 覆盖查询数据库中要询客户端系统的查询方法，方便以后其它客户端接入
  * @author LDZ   
  * @date 2015年10月29日 上午11:32:58 
  */
