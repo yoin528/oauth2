@@ -20,7 +20,7 @@ public class HomeController extends BaseController{
 	
 	@RequestMapping("")
 	public String home(){
-		return "index";
+		return "login";
 	}
 	@RequestMapping("/all")
 	public String all(){

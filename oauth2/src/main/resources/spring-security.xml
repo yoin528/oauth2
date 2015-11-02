@@ -44,9 +44,9 @@
 	<!-- 请求拦截登陆功能配置 -->
     <http auto-config="true" access-denied-page="/denied">
 		<intercept-url pattern="/all" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
-		<form-login login-page="/" default-target-url="/"
-			authentication-failure-url="/?login=error" />
-		<logout logout-success-url="/" />
+		<form-login login-page="/login" default-target-url="/login"
+			authentication-failure-url="/login?login=error" />
+		<logout logout-success-url="/login" />
 	</http>
 	<!-- 第一个认证管理器，表示登陆验证后用户的权限范围 -->
     <authentication-manager>
