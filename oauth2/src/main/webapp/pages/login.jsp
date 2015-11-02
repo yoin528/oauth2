@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-
-<c:set var="base" value="${pageContext.request.contextPath }/" scope="session"/>
+<%
+String path = request.getContextPath(); 
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+request.setAttribute("base", basePath);
+%>
 <sec:authentication property="principal" var="auth" scope="session" />
 
 <!DOCTYPE HTML>
@@ -10,8 +13,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>汇业生态城</title>
-<link type="text/css" href="./static/oauth_web.css?version=20140625" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="./static/pc-qrcode.css">
+<link type="text/css" href="${base}/static/oauth_web.css?version=20140625" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${base}/static/pc-qrcode.css">
 
 <!--<style>
 	body { padding-bottom:300px; }
@@ -27,7 +30,7 @@
     </div>
     <!-- 带头像  -->
     <div class="WB_panel oauth_main">
-    <form name="authZForm" action="${base}/oauth2/authorize" method="post" node-type="form">
+    <form name="authZForm" action="${base}/login" method="post" node-type="form">
       <div class="oauth_content" node-type="commonlogin">
         <p class="oauth_main_info">使用你的汇业帐号访问  <a href="http://www.member.com/server"  target="_blank" class="app_name">HuiYe.COM</a> 
         ，并同时登录汇业</p>
@@ -39,11 +42,11 @@
 					<div class="oauth_login_form">
 			            <p class="oauth_login_01" >
 			              <label class="oauth_input_label">帐号：</label>
-			              <input type="text" class="WB_iptxt oauth_form_input" id="userId" name="userId"  value="请用汇业帐号登录" node-type="userid" autocomplete="off" tabindex="1" />
+			              <input type="text" class="WB_iptxt oauth_form_input" id="username" onblur="alertMsg(this);" onfocus="focusMsg(this);" name="userId"  value="请用汇业帐号登录" node-type="userid" autocomplete="off" tabindex="1" />
 			            </p>
 			            <p>
 			              <label class="oauth_input_label">密码：</label>
-			              <input type="password" class="WB_iptxt oauth_form_input" id="passwd" name="passwd" node-type="passwd" autocomplete="off" tabindex="2"/>
+			              <input type="password" class="WB_iptxt oauth_form_input" id="passwd" name="password" node-type="passwd" autocomplete="off" tabindex="2"/>
 			            </p>
 						</div>
 				<!-- </form> -->
@@ -55,7 +58,7 @@
         </div>
         <div class="oauth_login_box01 clearfix">
           <div class="oauth_login_submit">
-              <p class="oauth_formbtn"><a node-type="submit" tabindex="4" action-type="submit"  href="javascript:;" class="WB_btn_login formbtn_01"></a><a node-type="cancel" tabindex="5" href="javascript:;" action-type="cancel" class="WB_btn_cancel"></a></p>
+              <p class="oauth_formbtn"><a node-type="submit" tabindex="4" action-type="submit" onclick="subBtn();"  href="javascript:;" class="WB_btn_login formbtn_01"></a><a node-type="cancel" tabindex="5" href="javascript:;" action-type="cancel" class="WB_btn_cancel"></a></p>
           </div>
           <!-- todo 添加appkey 白名单判断 -->
          </div>
@@ -85,10 +88,22 @@
     </div>
 </div>
 <!-- /二维码蒙层部分 -->
-<script src="./static/qrcode_login.js?version=20140625" charset="utf-8"></script>
-<script type="text/javascript" src="./static/oauth2Web.js?version=20141113"></script>
-<script src="./static/ssologin.js?version=20151026" charset="utf-8"></script>
+<script src="${base}/static/qrcode_login.js?version=20140625" charset="utf-8"></script>
+<script src="${base}/static/ssologin.js?version=20151026" charset="utf-8"></script>
 <script type="text/javascript">
+	function alertMsg(obj) {
+		if(obj.value=="") {
+			obj.value = "请用汇业帐号登录";
+		}
+	}
+	function focusMsg(obj) {
+		if(obj.value=="请用汇业帐号登录") {
+			obj.value="";
+		}
+	}
+	function subBtn() {
+		document.forms[0].submit();
+	}
 	(function() {
 	if(self !== top) {
 	var img = new Image();
