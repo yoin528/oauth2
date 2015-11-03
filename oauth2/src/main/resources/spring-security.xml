@@ -46,7 +46,8 @@
 		<intercept-url pattern="/all" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
 		
 		<form-login login-page="/pages/login.jsp" 
-		    default-target-url="/login" 
+		    default-target-url="/index.jsp" 
+		    login-processing-url="/login"
 		    password-parameter="password" 
 		    username-parameter="username"
 			authentication-failure-url="/pages/login.jsp?login=error" />
@@ -75,7 +76,7 @@
 			secret="secret_1" scope="read,write,trust" />
 	</oauth2:client-details-service> -->
 	<!-- 实现数据库存储客户系统详细功能 -->
-    <beans:bean id="clientDetailsService" class="com.hy.oauth2.service.ClientDetailsServiceImpl">
+    <beans:bean id="clientDetailsService" class="com.hy.oauth2.auth.ClientDetailsServiceImpl">
         <beans:constructor-arg ref="dataSource" index="0"/>
     </beans:bean>
     
@@ -108,8 +109,9 @@
 	<beans:bean id="oauth2AccessDeniedHandler"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 	<!-- 客户端审批处理，服务端对客户端的审批验证是否可信任,实现client是否可信任的关键点 -->
-	<beans:bean id="oauthUserApprovalHandler"
-		class="org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler" />
+	<beans:bean id="oauthUserApprovalHandler" class="com.hy.oauth2.auth.ClientApprovalHandlerImpl" >
+	    <beans:property name=""></beans:property>
+	</beans:bean>
 	<!-- 访问决策管理，认证通过后访问其它资源的决策 -->
 	<beans:bean id="oauth2AccessDecisionManager"
 		class="org.springframework.security.access.vote.UnanimousBased">
@@ -128,13 +130,15 @@
         <beans:constructor-arg index="0" ref="dataSource"/>
     </beans:bean>
 	
-	<!-- 配置当前oauth2的server所能支持的请求类型，使用数据库生成authorization code -->
+	<!-- 配置当前oauth2的server所能支持的请求类型，使用数据库生成authorization code，第三方登陆校验成功后调用user-approval-page标签的页面 -->
 	<oauth2:authorization-server
 		client-details-service-ref="clientDetailsService" 
 		token-services-ref="tokenServices"
 		user-approval-handler-ref="oauthUserApprovalHandler" 
 		user-approval-page="oauth_approval" 
-		error-page="oauth_error">
+		
+		error-page="/error"
+		>
 		<oauth2:authorization-code authorization-code-services-ref="jdbcAuthorizationCodeServices"/>
 		<oauth2:implicit />
 		<oauth2:refresh-token />

@@ -5,6 +5,7 @@
 String path = request.getContextPath(); 
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 request.setAttribute("base", basePath);
+request.setAttribute("msg", request.getParameter("login"));
 %>
 <sec:authentication property="principal" var="auth" scope="session" />
 
@@ -14,7 +15,6 @@ request.setAttribute("base", basePath);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>汇业生态城</title>
 <link type="text/css" href="${base}/static/oauth_web.css?version=20140625" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="${base}/static/pc-qrcode.css">
 
 <!--<style>
 	body { padding-bottom:300px; }
@@ -30,23 +30,26 @@ request.setAttribute("base", basePath);
     </div>
     <!-- 带头像  -->
     <div class="WB_panel oauth_main">
-    <form name="authZForm" action="${base}/login" method="post" node-type="form">
+    <form name="authZForm" action="${base}login" method="post" node-type="form">
       <div class="oauth_content" node-type="commonlogin">
-        <p class="oauth_main_info">使用你的汇业帐号访问  <a href="http://www.member.com/server"  target="_blank" class="app_name">HuiYe.COM</a> 
+        <p class="oauth_main_info" style="margin-bottom: 15px;">使用你的汇业帐号访问  <a href="http://www.member.com/server"  target="_blank" class="app_name">HuiYe.COM</a> 
         ，并同时登录汇业</p>
         	
         <!-- 登录 -->
-        	<div class="oauth_login clearfix">
-				   <!-- <input type="hidden" name="action"  id="action" value="login"/> -->
-	       	       
+        	<div class="oauth_login clearfix" style="margin-top: 10px;">
+	       	       		<c:if test="${msg == 'error'}">
+		       	       		<p style="line-height: 30px;text-align: center;width: 540px;color: red;font-weight: bold;">
+		       	       			错误：用户名或密码有误！
+		       	       		</p>
+	       	       		</c:if>
 					<div class="oauth_login_form">
 			            <p class="oauth_login_01" >
 			              <label class="oauth_input_label">帐号：</label>
-			              <input type="text" class="WB_iptxt oauth_form_input" id="username" onblur="alertMsg(this);" onfocus="focusMsg(this);" name="userId"  value="请用汇业帐号登录" node-type="userid" autocomplete="off" tabindex="1" />
+			              <input type="text" class="WB_iptxt oauth_form_input" id="username" onblur="alertMsg(this);" onfocus="focusMsg(this);" name="username"  value="请用汇业帐号登录" node-type="userid" autocomplete="off" tabindex="1" />
 			            </p>
 			            <p>
 			              <label class="oauth_input_label">密码：</label>
-			              <input type="password" class="WB_iptxt oauth_form_input" id="passwd" name="password" node-type="passwd" autocomplete="off" tabindex="2"/>
+			              <input type="password" class="WB_iptxt oauth_form_input" id="password" name="password" node-type="passwd" autocomplete="off" tabindex="2"/>
 			            </p>
 						</div>
 				<!-- </form> -->
@@ -72,23 +75,6 @@ request.setAttribute("base", basePath);
     </div>
   </div>
   
-  <!-- 二维码蒙层部分 -->
-<div class="qr-cover" style="display:none;" node-type="qrcodelogin">
-    <div class="qr-cover-inner">
-        <h1 class="qr-title">
-            用微博账号安全登录
-        </h1>
-        <div class="qr-code" node-type="qrimage">
-        </div>
-        <div class="qr-tip">
-            <div class="qr-txt">使用微博客户端扫描二维码登录“CSDN.NET”</div>
-            <div class="qr-ltxt">提示：为保障帐号安全，请认准本页URL地址必须以 api.weibo.com 开头</div>
-        </div>
-        <div class="qr-change"><a href="#" onclick="return false;" action-type="qrmsgclose" class="qr-change-logo"></a></div>
-    </div>
-</div>
-<!-- /二维码蒙层部分 -->
-<script src="${base}/static/qrcode_login.js?version=20140625" charset="utf-8"></script>
 <script src="${base}/static/ssologin.js?version=20151026" charset="utf-8"></script>
 <script type="text/javascript">
 	function alertMsg(obj) {
