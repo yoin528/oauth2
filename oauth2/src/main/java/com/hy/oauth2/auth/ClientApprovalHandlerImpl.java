@@ -9,7 +9,6 @@ import com.hy.oauth2.model.ClientDetails;
 import com.hy.oauth2.service.ClientDetailsService;
 
 public class ClientApprovalHandlerImpl extends DefaultUserApprovalHandler {
-	@Autowired
 	private ClientDetailsService clientDetailsService;
 	@Override
 	public boolean isApproved(AuthorizationRequest authorizationRequest,

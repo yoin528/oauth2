@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.hy.oauth2.model.ClientDetails;
 @Transactional
-@Service("clientDetailsService")
+@Service("clientDetailsServiceImpl")
 public class ClientDetailsServiceImpl implements ClientDetailsService {
 	@Autowired
 	private SessionFactory sessionFactory;
 	public ClientDetails loadByClientId(String clientId) {
-		String sql = "select * from oauth_client_details where clientId = ?";
-		Query query = sessionFactory.getCurrentSession().createQuery(sql);
+		String hql = "from ClientDetails where clientId = ?";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter(0, clientId);
 		return (ClientDetails)query.uniqueResult();
 	}

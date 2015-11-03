@@ -46,7 +46,7 @@
 		<intercept-url pattern="/all" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
 		
 		<form-login login-page="/pages/login.jsp" 
-		    default-target-url="/index.jsp" 
+		    default-target-url="/pages/index.jsp" 
 		    login-processing-url="/login"
 		    password-parameter="password" 
 		    username-parameter="username"
@@ -109,9 +109,9 @@
 	<beans:bean id="oauth2AccessDeniedHandler"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 	<!-- 客户端审批处理，服务端对客户端的审批验证是否可信任,实现client是否可信任的关键点 -->
-	<beans:bean id="oauthUserApprovalHandler" class="com.hy.oauth2.auth.ClientApprovalHandlerImpl" >
+	<!-- <beans:bean id="oauthUserApprovalHandler" class="com.hy.oauth2.auth.ClientApprovalHandlerImpl" >
 	    <beans:property name=""></beans:property>
-	</beans:bean>
+	</beans:bean> -->
 	<!-- 访问决策管理，认证通过后访问其它资源的决策 -->
 	<beans:bean id="oauth2AccessDecisionManager"
 		class="org.springframework.security.access.vote.UnanimousBased">
@@ -136,9 +136,7 @@
 		token-services-ref="tokenServices"
 		user-approval-handler-ref="oauthUserApprovalHandler" 
 		user-approval-page="oauth_approval" 
-		
-		error-page="/error"
-		>
+		error-page="/error">
 		<oauth2:authorization-code authorization-code-services-ref="jdbcAuthorizationCodeServices"/>
 		<oauth2:implicit />
 		<oauth2:refresh-token />
@@ -146,6 +144,9 @@
 		<oauth2:password />
 	</oauth2:authorization-server>
 	
+	<beans:bean id="oauthUserApprovalHandler" class="com.hy.oauth2.auth.ClientApprovalHandlerImpl">
+        <beans:property name="clientDetailsService" ref="clientDetailsServiceImpl"/>
+    </beans:bean>
 	
 	<!-- 定义受保存的资源 -->
 	<oauth2:resource-server id="mobileResourceServer" resource-id="mobile-resource" token-services-ref="tokenServices" />
