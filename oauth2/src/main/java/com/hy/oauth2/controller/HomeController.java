@@ -23,7 +23,8 @@ public class HomeController extends BaseController{
 		return "login";
 	}
 	@RequestMapping("/all")
-	public String all(){
+	public String all(String clientId,String clientSecret,String code,String redirectUri){
+		System.out.println(clientId+","+clientSecret+","+code+","+redirectUri);
 		return "all";
 	}
 	
