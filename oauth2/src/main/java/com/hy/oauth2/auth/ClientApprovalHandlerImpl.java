@@ -1,6 +1,5 @@
 package com.hy.oauth2.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
 import org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler;
