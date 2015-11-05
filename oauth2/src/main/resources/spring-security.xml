@@ -43,7 +43,11 @@
     
 	<!-- 请求拦截登陆功能配置 -->
     <http auto-config="true" access-denied-page="/denied">
-		<intercept-url pattern="/all" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
+		<intercept-url pattern="/oauth/**" 
+            access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE,ROLE_CLIENT"/>
+		<intercept-url 
+            pattern="/**" 
+            access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 		
 		<form-login login-page="/pages/login.jsp" 
 		    default-target-url="/pages/index.jsp" 
@@ -52,6 +56,7 @@
 		    username-parameter="username"
 			authentication-failure-url="/pages/login.jsp?login=error" />
 		<logout logout-success-url="/login" />
+		<anonymous/>
 	</http>
 	<!-- 第一个认证管理器，表示登陆验证后用户的权限范围 -->
     <authentication-manager>
