@@ -40,9 +40,17 @@
 		<custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauth2AccessDeniedHandler" />
 	</http>
+ 	<http pattern="/user**" create-session="never"
+		entry-point-ref="oauth2AuthenticationEntryPoint"
+		access-decision-manager-ref="oauth2AccessDecisionManager">
+		<anonymous enabled="false" />
+		<intercept-url pattern="/user**" access="ROLE_ADMIN,SCOPE_READ,ROLE_USER" />
+		<custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="oauth2AccessDeniedHandler" />
+	</http>
     
 	<!-- 请求拦截登陆功能配置 -->
-    <http auto-config="true" access-denied-page="/denied">
+    <http auto-config="true" access-denied-page="/denied" authentication-manager-ref="authenticationManager">
 		<intercept-url pattern="/oauth/**" 
             access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE,ROLE_CLIENT"/>
 		<intercept-url 
@@ -59,22 +67,19 @@
 		<anonymous/>
 	</http>
 	<!-- 第一个认证管理器，表示登陆验证后用户的权限范围 -->
-    <authentication-manager>
-		<authentication-provider>
+    <authentication-manager  alias="authenticationManager">
+		<authentication-provider user-service-ref="userService">
 			<!-- <password-encoder hash="md5">
 				<salt-source user-property="email"/> 
 			</password-encoder> -->
-			<jdbc-user-service data-source-ref="dataSource"
+			<!-- <jdbc-user-service data-source-ref="dataSource"
 				users-by-username-query="select username, password, 1 from user where username = ?"
-				authorities-by-username-query="select u.username, r.role from user u left join role r on u.role_id=r.id where username = ?" />
+				authorities-by-username-query="select u.username, r.role from user u left join role r on u.role_id=r.id where username = ?" /> -->
 		</authentication-provider>
 	</authentication-manager>
-	
-	
-	
 	<!-- 定义一种客户端用户 -->
 	<!-- 客户端信息服务配置，即客户id，客户端使用的权限类型,客户端的私密信息，客户端的作用域 -->
-<!-- 此处需要区分不同的客户端系统，需要代码实现 -->
+	<!-- 此处需要区分不同的客户端系统，需要代码实现 -->
     <!-- <oauth2:client-details-service id="clientDetailsService">
 		<oauth2:client client-id="mobile_1"
 			authorized-grant-types="password,authorization_code,refresh_token,implicit"
@@ -159,8 +164,4 @@
 	<beans:bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
 		<beans:property name="authenticationManager" ref="oauth2AuthenticationManager" />
 	</beans:bean>
-	
-	
-	
-	<!-- http://localhost:8080/oauth2/oauth/token?client_id=mobile_1&client_secret=secret_1&grant_type=password&username=zhangsan&password=123456 -->
 </beans:beans>

@@ -1,8 +1,11 @@
 package com.hy.oauth2.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import net.sf.json.JSON;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 public class BaseController {
@@ -19,4 +22,15 @@ public class BaseController {
 		this.response = response;
 		request.setAttribute("base","http://"  +  request.getServerName()  +  ":"  +  request.getServerPort()  +  request.getContextPath());
 	}
+	
+	public static void writeJson(HttpServletResponse response, JSON json) {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            PrintWriter writer = response.getWriter();
+            json.write(writer);
+            writer.flush();
+        } catch (IOException e) {
+            throw new IllegalStateException("Write json to response error", e);
+        }
+    }
 }
