@@ -14,7 +14,7 @@
 		(access标签以ROLE_为前缀，也可以是常量：IS_AUTHENTICATED_ANONYMOUSLY表示用户不需要登录就可以访问；IS_AUTHENTICATED_REMEMBERED表示用户需要是通过Remember-Me功能进行自动登录的才能访问；IS_AUTHENTICATED_FULLY表示用户的认证类型应该是除前两者以外的，也就是用户需要是通过登录入口进行登录认证的才能访问) 
 	-->
     <http pattern="/oauth/token" create-session="stateless"
-		authentication-manager-ref="oauth2AuthenticationManager">
+		authentication-manager-ref="oauth2AuthenticationManager" entry-point-ref="oauth2AuthenticationEntryPoint">
 		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
 		<http-basic entry-point-ref="oauth2AuthenticationEntryPoint" />
@@ -36,7 +36,7 @@
 		entry-point-ref="oauth2AuthenticationEntryPoint"
 		access-decision-manager-ref="oauth2AccessDecisionManager">
 		<anonymous enabled="false" />
-		<intercept-url pattern="/admin**" access="ROLE_ADMIN,SCOPE_READ" />
+		<intercept-url pattern="/admin**" access="ROLE_ADMIN,SCOPE_READ,ROLE_USER" />
 		<custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauth2AccessDeniedHandler" />
 	</http>
@@ -50,7 +50,7 @@
 	</http>
     
 	<!-- 请求拦截登陆功能配置 -->
-    <http auto-config="true" access-denied-page="/denied" authentication-manager-ref="authenticationManager">
+    <http auto-config="true" access-denied-page="/denied" disable-url-rewriting="true" authentication-manager-ref="authenticationManager">
 		<intercept-url pattern="/oauth/**" 
             access="ROLE_USER,ROLE_UNITY,ROLE_MOBILE,ROLE_CLIENT"/>
 		<intercept-url 
@@ -64,11 +64,10 @@
 		    username-parameter="username"
 			authentication-failure-url="/pages/login.jsp?login=error" />
 		<logout logout-success-url="/login" />
-		<anonymous/>
 	</http>
 	<!-- 第一个认证管理器，表示登陆验证后用户的权限范围 -->
-    <authentication-manager  alias="authenticationManager">
-		<authentication-provider user-service-ref="userService">
+    <authentication-manager alias="authenticationManager">
+		<authentication-provider  user-service-ref="userService">
 			<!-- <password-encoder hash="md5">
 				<salt-source user-property="email"/> 
 			</password-encoder> -->

@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSON;
+import net.sf.json.JSONObject;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 public class BaseController {
@@ -23,9 +26,10 @@ public class BaseController {
 		request.setAttribute("base","http://"  +  request.getServerName()  +  ":"  +  request.getServerPort()  +  request.getContextPath());
 	}
 	
-	public static void writeJson(HttpServletResponse response, JSON json) {
+	public static void writeJson(HttpServletResponse response, Object model) {
         response.setContentType("application/json;charset=UTF-8");
         try {
+        	JSON json = JSONObject.fromObject(model);
             PrintWriter writer = response.getWriter();
             json.write(writer);
             writer.flush();

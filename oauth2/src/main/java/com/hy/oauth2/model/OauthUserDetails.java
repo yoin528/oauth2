@@ -23,10 +23,12 @@ public class OauthUserDetails implements UserDetails {
     }
     public OauthUserDetails(User user) {
         this.user = user;
-        initialAuthorities();
+    }
+    public void addAuthorities(GrantedAuthority obj) {
+    	grantedAuthorities.add(obj);
     }
 
-    private void initialAuthorities() {
+//    private void initialAuthorities() {
         //Default, everyone have it
 //        this.grantedAuthorities.add(DEFAULT_USER_ROLE);
         //default user have all privileges
@@ -39,7 +41,7 @@ public class OauthUserDetails implements UserDetails {
 //                this.grantedAuthorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + privilege.name()));
 //            }
 //        }
-    }
+//    }
 
     /**
      * Return authorities, more information see {@link #initialAuthorities()}

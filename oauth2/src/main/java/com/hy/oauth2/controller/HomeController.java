@@ -47,17 +47,17 @@ public class HomeController extends BaseController{
 		return "denied";
 	}
 	@RequestMapping("/user/user_info")
-	public String userInfo() {
+	public void userInfo() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    Object principal = authentication.getPrincipal();
 	    System.out.println(authentication.getName());
 	    if (authentication instanceof OAuth2Authentication &&
-                (principal instanceof String || principal instanceof org.springframework.security.core.userdetails.User)) {
+                (principal instanceof String || principal instanceof com.hy.oauth2.model.User)) {
 	    	OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
 	    	System.out.println(oauth2Authentication.getName());
+	    	writeJson(response, principal);
         } else {
-            System.out.println(principal);
+        	writeJson(response, principal);
         }
-		return "denied";
 	}
 }
