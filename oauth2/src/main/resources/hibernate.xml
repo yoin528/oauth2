@@ -13,8 +13,7 @@
     <context:property-placeholder location="classpath:hibernate.properties" />
     
 	<!-- 使用C3P0数据源，MySQL数据库 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<!-- MySQL5 -->
 		<property name="driverClass" value="${driverClassName}"></property>
 		<property name="jdbcUrl" value="${url}"></property>
