@@ -2,12 +2,12 @@ package com.hy.oauth2.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
-import org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler;
+import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 
 import com.hy.oauth2.model.ClientDetails;
 import com.hy.oauth2.service.ClientDetailsService;
 
-public class ClientApprovalHandlerImpl extends DefaultUserApprovalHandler {
+public class ClientApprovalHandlerImpl extends TokenStoreUserApprovalHandler {
 	private ClientDetailsService clientDetailsService;
 	@Override
 	public boolean isApproved(AuthorizationRequest authorizationRequest,

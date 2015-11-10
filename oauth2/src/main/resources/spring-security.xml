@@ -64,6 +64,7 @@
 		    username-parameter="username"
 			authentication-failure-url="/pages/login.jsp?login=error" />
 		<logout logout-success-url="/login" />
+		<anonymous/>
 	</http>
 	<!-- 第一个认证管理器，表示登陆验证后用户的权限范围 -->
     <authentication-manager alias="authenticationManager">
@@ -155,7 +156,13 @@
 	
 	<beans:bean id="oauthUserApprovalHandler" class="com.hy.oauth2.auth.ClientApprovalHandlerImpl">
         <beans:property name="clientDetailsService" ref="clientDetailsServiceImpl"/>
+        <beans:property name="requestFactory" ref="oAuth2RequestFactory" />
+	    <beans:property name="tokenStore" ref="tokenStore" />
     </beans:bean>
+    
+	<beans:bean id="oAuth2RequestFactory" class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
+    	<beans:constructor-arg ref="clientDetailsService"/>
+	</beans:bean>
 	
 	<!-- 定义受保存的资源 -->
 	<oauth2:resource-server id="mobileResourceServer" resource-id="mobile-resource" token-services-ref="tokenServices" />
